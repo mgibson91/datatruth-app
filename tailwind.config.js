@@ -8,6 +8,11 @@ module.exports = {
   },
   theme: {
     extend: {
+      colors: {
+        logo: {
+          teal: "#17E1E3"
+        },
+      },
       fontFamily: {
         display: ["var(--font-sf)", "system-ui", "sans-serif"],
         default: ["var(--font-inter)", "system-ui", "sans-serif"],
