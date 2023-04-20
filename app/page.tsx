@@ -1,38 +1,10 @@
-import Card from "@/components/home/card";
-import Balancer from "react-wrap-balancer";
-import { DEPLOY_URL } from "@/lib/constants";
-import { Github, Twitter } from "@/components/shared/icons";
-import WebVitals from "@/components/home/web-vitals";
-import ComponentGrid from "@/components/home/component-grid";
-import Image from "next/image";
-import { nFormatter } from "@/lib/utils";
-import { Table } from '@mui/material';
-import OpTable from "@/components/op-table";
+'use client';
 
-const data = [
-  {
-    "country": "Afghanistan",
-    "population": 32526562.0,
-    "gdp_per_capita": 594.32308122,
-    "bronze_count": 1.0,
-    "gold_count": 0.0,
-    "silver_count": 0.0,
-    "total_count": 1.0,
-    "population_adjusted_performance": 0.002982,
-    "gdp_adjusted_performance": 0.029511
-  },
-  {
-    "country": "Algeria",
-    "population": 39666519.0,
-    "gdp_per_capita": 4206.0312324496,
-    "bronze_count": 0.0,
-    "gold_count": 1.0,
-    "silver_count": 0.0,
-    "total_count": 1.0,
-    "population_adjusted_performance": 0.002446,
-    "gdp_adjusted_performance": 0.003419
-  }
-];
+import Balancer from "react-wrap-balancer";
+import OpTable from "@/components/op-table";
+import {useEffect, useState} from "react";
+import OpSelect from "@/components/op-select";
+import OpLoading from "@/components/op-loading";
 
 const columns = [
   { id: 'country', label: 'Country' },
@@ -46,10 +18,32 @@ const columns = [
   { id: 'gdp_adjusted_performance', label: 'GDP adjusted performance' },
 ];
 
-export default async function Home() {
-  const medalBreakdown = await fetch(
-    'https://us-central1-property-insight-ai.cloudfunctions.net/get_medal_breakdown')
-    .then((res) => res.json());
+const SORT_ITEMS = columns.map((column) => ({  value: column.id, label: column.label }));
+
+const YEARS = [
+  { value: 2004, label: '2004' },
+  { value: 2008, label: '2008' },
+  { value: 2012, label: '2012' },
+]
+
+export default function Home() {
+  const [medalBreakdown, setMedalBreakdown] = useState([]);
+
+  const [year, setYear] = useState(2012);
+  const [sortColumn, setSortColumn] = useState('country');
+  const [sortDirection, setSortDirection] = useState('asc');
+
+  useEffect(() => {
+    fetch(
+      `https://europe-west2-property-insight-ai.cloudfunctions.net/get_medal_breakdown?year=${year}&sort_field=${sortColumn}&sort_direction=${sortDirection}`
+    )
+      .then(async (res) => {
+        setMedalBreakdown(await res.json());
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [year, sortColumn, sortDirection]);
 
   return (
     <>
@@ -70,11 +64,22 @@ export default async function Home() {
         </p>
       </div>
 
-      <div className='z-10 pt-10'>
+      {!medalBreakdown.length && (
+        <div className='z-10 pt-32 w-64'>
+          <OpLoading></OpLoading>
+        </div>
+      )}
+
+      {medalBreakdown.length && (<div className='z-10 pt-10 flex flex-col'>
+        <div className='flex-none flex flex-row justify-end pb-5 gap-3'>
+          <OpSelect label='Year' defaultValue={2012} items={YEARS} onItemSelected={(event) => setYear((event as any).target?.value)}></OpSelect>
+          <OpSelect label='Sort by' items={SORT_ITEMS} onItemSelected={(event) => setSortColumn((event as any).target?.value)}></OpSelect>
+          <OpSelect label='Direction' items={[ { label: 'Ascending', value: 'asc' }, { label: 'Descending', value: 'desc' }]} onItemSelected={(event) => setSortDirection((event as any).target?.value)}></OpSelect>
+        </div>
         <OpTable columns={columns} rows={medalBreakdown} />
-      </div>
+      </div>)}
 
     </>
-  );
+  )
 }
 

@@ -10,7 +10,7 @@ module.exports = {
     extend: {
       colors: {
         logo: {
-          teal: "#17E1E3"
+          teal: "#17E1E3",
         },
       },
       fontFamily: {
