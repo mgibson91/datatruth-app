@@ -1,5 +1,5 @@
 {
-  "name": "precedent",
+  "name": "olympulse",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,8 +8,6 @@
     "format:write": "prettier --write \"**/*.{css,js,json,jsx,ts,tsx}\"",
     "format": "prettier \"**/*.{css,js,json,jsx,ts,tsx}\"",
     "start": "next start",
-    "prebuild": "prisma generate",
-    "predev": "prisma generate",
     "lint": "next lint"
   },
   "dependencies": {
