@@ -17,7 +17,9 @@ export default function OpLoading() {
   return (
     <Box sx={{ width: '100%' }}>
       <ThemeProvider theme={theme}>
-        <LinearProgress color='logoRed'/>
+        { // @ts-ignore
+          <LinearProgress color='logoRed'/>
+        }
       </ThemeProvider>
     </Box>
   );
