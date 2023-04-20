@@ -49,10 +49,10 @@ export default function StickyHeadTable(props: Props) {
             <TableRow>
               {columns.map((column) => (
                 <TableCell
-                  className='bg-logo-teal font-bold'
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  // For some reason tailwind color / font work locally here but not when deployed vercel so putting in styles
+                  style={{ minWidth: column.minWidth, backgroundColor: '#17E1E3', fontWeight: 'bold' }}
                 >
                   {column.label}
                 </TableCell>
@@ -64,7 +64,7 @@ export default function StickyHeadTable(props: Props) {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id} className='hover:bg-logo-teal'>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
