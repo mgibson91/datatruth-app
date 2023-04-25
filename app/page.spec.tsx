@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, RenderResult, waitFor} from '@testing-library/react';
+import {act, render, RenderResult, waitFor} from '@testing-library/react';
 import Home from './page';
 import {MOCK_MEDAL_BREAKDOWN} from "../mocks/mock-medal-breakdown";
 
@@ -21,8 +21,10 @@ describe('Home', () => {
   window.ResizeObserver = ResizeObserver;
   let result: RenderResult;
 
-  beforeEach(() => {
-    result = render(<Home />);
+  beforeEach(async () => {
+    // As home has an immediately triggered useEffect, render within act as it triggers an update
+    // NOTE: Ignoring material UI table key error :)
+    result = await act(async () => render(<Home />));
   })
 
   test('should render Home component', async () => {

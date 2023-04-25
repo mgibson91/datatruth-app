@@ -72,8 +72,8 @@ export default function Home() {
       {medalBreakdown.length && (<div className='z-10 pt-10 flex flex-col'>
         <div className='flex-none flex flex-row justify-end pb-5 gap-3'>
           <OpSelect label='Year' defaultValue={2012} items={YEARS} onItemSelected={(event) => setYear((event as any).target?.value)}></OpSelect>
-          <OpSelect label='Sort by' items={SORT_ITEMS} onItemSelected={(event) => setSortColumn((event as any).target?.value)}></OpSelect>
-          <OpSelect label='Direction' items={[ { label: 'Ascending', value: 'asc' }, { label: 'Descending', value: 'desc' }]} onItemSelected={(event) => setSortDirection((event as any).target?.value)}></OpSelect>
+          <OpSelect label='Sort by' defaultValue='population_adjusted_performance' items={SORT_ITEMS} onItemSelected={(event) => setSortColumn((event as any).target?.value)}></OpSelect>
+          <OpSelect label='Direction' defaultValue='desc' items={[ { label: 'Ascending', value: 'asc' }, { label: 'Descending', value: 'desc' }]} onItemSelected={(event) => setSortDirection((event as any).target?.value)}></OpSelect>
         </div>
         <OpTable columns={columns} rows={medalBreakdown} />
       </div>)}
