@@ -5,6 +5,7 @@ import OpTable from "@/components/op-table";
 import {useEffect, useState} from "react";
 import OpSelect from "@/components/op-select";
 import OpLoading from "@/components/op-loading";
+import {getMedalBreakdown} from "../api/get-medal-breakdown";
 
 const columns = [
   { id: 'country', label: 'Country' },
@@ -34,11 +35,9 @@ export default function Home() {
   const [sortDirection, setSortDirection] = useState('asc');
 
   useEffect(() => {
-    fetch(
-      `https://europe-west2-property-insight-ai.cloudfunctions.net/get_medal_breakdown?year=${year}&sort_field=${sortColumn}&sort_direction=${sortDirection}`
-    )
+    getMedalBreakdown(year, sortColumn, sortDirection)
       .then(async (res) => {
-        setMedalBreakdown(await res.json());
+        setMedalBreakdown(res);
       })
       .catch((err) => {
         console.error(err);
